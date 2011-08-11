@@ -2,6 +2,15 @@ onload = function() {
 	init();
 }
 
+/*----------------------------------
+ * デフォ値
+ *----------------------------------*/
+var defTitle = "3 Minutes Speech";
+var defTitleFinish = "Time UP!";
+var defMin   = 1;
+var defColorStart	= "blue";
+var defColorFinish	= "red";
+
 // 描画エリア定義
 var AREA_X = 500;
 var AREA_Y = 500;
@@ -9,6 +18,9 @@ var OFFESET_X = 50;
 var OFFESET_Y = 50;
 var INTERVAL = 100;
 
+/*----------------------------------
+ * Global変数
+ *----------------------------------*/
 var canvas;
 var ctx;
 
@@ -17,25 +29,116 @@ var degPerMin;
 var degree = -90;
 var degreeMin = -90;
 
-function init() {
-	// canvas要素のノードオブジェクト
-	canvas = document.getElementById('analog');
-	// 2Dコンテキスト
-	ctx = canvas.getContext('2d');
+var min;
+var sec;
+var msec;
+var tid;	// timer
+var flg = false;
 
-	degree = -90;
-	degreeMin = -90;
-	degPerSec = 360 / 1000;
-	degPerMin = 360 / 3;
-	tid = setInterval("drawArc()", INTERVAL);
+/*----------------------------------
+ * 
+ *----------------------------------*/
+function init() {
+    // canvas要素のノードオブジェクト
+    canvas = document.getElementById('analog');
+    // 2Dコンテキスト
+    ctx = canvas.getContext('2d');
+
+    degree = -90;
+    degreeMin = -90;
+    degPerSec = 360 / 1000;
+    degPerMin = 360 / 3;
+
+    min  = defMin;
+    sec  = 0;
+    msec   = 0;
+    flg  = false;
+
+    document.getElementById("title").firstChild.nodeValue = defTitle;
+    document.getElementById("title").style.color = defColorStart;
+    document.getElementById("digiMin").firstChild.nodeValue = min;
+    document.getElementById("digiSec").firstChild.nodeValue = "0"+sec;
+    document.getElementById("digiMSec").firstChild.nodeValue = msec;
+
+    document.btns.elements[0].value = "START";
+    clearInterval(tid);
 }
 
+/*----------------------------------
+ * 
+ *----------------------------------*/
 function drawClear ()
 {
 	ctx.clearRect(0, 0, AREA_X, AREA_Y);
 }
 
-function drawArc ()
+/*----------------------------------
+ * btnAction:Start, Stop
+ *----------------------------------*/
+function btnAction ()
+{
+	if (false == flg) {
+		tid = setInterval("onTimer()", INTERVAL);
+		flg = true;
+		document.btns.elements[0].value = "STOP";
+	}
+	else {
+		clearInterval(tid);
+		flg = false;
+		document.btns.elements[0].value = "START";
+	}
+}
+
+/*----------------------------------
+ * onTimer:一定時間ごとの処理
+ *----------------------------------*/
+function onTimer()
+{
+	if ((0==min)&&(0==sec)&&(0==msec)) {
+		finish();
+		return;
+	}
+	
+	if (0 == msec) {
+		msec = 9;
+		if (0 == sec) {
+			sec = 59;
+			min--;
+		}
+		else{
+			sec--;
+		}	
+	}
+	else{
+		msec--;
+	}
+
+	document.getElementById("digiMin").firstChild.nodeValue = min;
+	
+	if (10>sec) {
+		document.getElementById("digiSec").firstChild.nodeValue = "0"+sec;
+	}
+	else {
+		document.getElementById("digiSec").firstChild.nodeValue = sec;
+	}
+	document.getElementById("digiMSec").firstChild.nodeValue = msec;
+
+    drawArc();
+}
+
+/*----------------------------------
+ * finish:終了時の処理
+ *----------------------------------*/
+function finish() {
+	clearInterval(tid);
+	document.getElementById("title").firstChild.nodeValue = defTitleFinish;
+	document.getElementById("title").style.color = defColorFinish;
+}
+
+/*----------------------------------
+ * 
+ *----------------------------------*/
+ function drawArc ()
 {
 	if ( 270 <= degree) {
 		degree = -90;
