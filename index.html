@@ -1,19 +1,19 @@
-<!--
-canvas練習
-参考：http://www.html5.jp/canvas/how2.html
--->
 <html>
 <head>
-	<script type="text/javascript" src="./countdown.js"></script>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="./countdown.js"></script>
 </head>
 <body>
-    <h1>Canvas</h1>
-    <canvas id="canvassample" width="500" height="500"></canvas>
+    <h1 id="title">&nbsp;</h1>
+    <canvas id="analog" width="500" height="500"></canvas>
+
+    <div id="digital"></div>
+        <span id="textMin">&nbsp;</span>:<span id="textSec">&nbsp;</span>:<span id="textMSec">&nbsp;</span>
+    </div>
 
     <form name="btns">
-        <input type="button" value="clear" onclick="drawClear()">
+        <input type="button" value="btn" onclick="btnAction()">
+        <input type="button" value="Reset" onclick="init()">
     </form>
-    
-    <div id="digital"></div>
 </body>
 </html>

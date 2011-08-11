@@ -19,7 +19,7 @@ var degreeMin = -90;
 
 function init() {
 	// canvas要素のノードオブジェクト
-	canvas = document.getElementById('canvassample');
+	canvas = document.getElementById('analog');
 	// 2Dコンテキスト
 	ctx = canvas.getContext('2d');
 
