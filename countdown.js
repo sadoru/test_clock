@@ -3,23 +3,28 @@ onload = function() {
 }
 
 /*----------------------------------
- * デフォ値
+ * Default value
  *----------------------------------*/
-var COUNT_TIME_MIN  = 2;
-var STR_TITLE       = "3 Minutes Speech";
-var STR_FINISH      = "Time UP!";
-var COLOR_START     = "blue";
-var COLOR_FINISH    = "red";
+var COUNT_TIME  = 3;
+var STR_TITLE   = COUNT_TIME + " Minutes Speech";
+var STR_FINISH  = "Time UP!";
+var COLOR_START = "blue";
+var COLOR_FINISH = "red";
 
 // 描画エリア定義
-var AREA_X = 500;
-var AREA_Y = 500;
-var OFFESET_X = 50;
-var OFFESET_Y = 50;
+var AREA_X = 400;
+var AREA_Y = 400;
+var CENTER_X = AREA_X / 2;
+var CENTER_Y = AREA_Y / 2;
+var CIRCLE_WIDTH = 50;
+var R_MIN = CENTER_X - (CIRCLE_WIDTH/2);
+var R_SEC = R_MIN / 2;
+
 var INTERVAL = 100;
 
+// １更新あたりの角度
 var ANGLE_PER_SEC = (360 / 60) / (1000 / INTERVAL);
-var ANGLE_PER_MIN = (360 / (60*COUNT_TIME_MIN)) / (1000 / INTERVAL);
+var ANGLE_PER_MIN = (360 / (60*COUNT_TIME)) / (1000 / INTERVAL);
 
 /*----------------------------------
  * Global変数
@@ -49,7 +54,7 @@ function init() {
     degreeSec = -90;
     degreeMin = -90;
 
-    min  = COUNT_TIME_MIN;
+    min  = COUNT_TIME;
     sec  = 0;
     msec   = 0;
     flg  = false;
@@ -155,35 +160,32 @@ function countDigital ()
 
 	drawClear();
 
-	var hankei = 200;
-	var hankeiMin = 140;
-
     // draw background circles
     ctx.beginPath();
     ctx.strokeStyle = 'rgb(0, 0, 255)';
-    ctx.lineWidth = 50;
-    ctx.arc(OFFESET_X + hankei, OFFESET_Y + hankei, hankei, 0, Math.PI*2, false);
+    ctx.lineWidth = CIRCLE_WIDTH;
+    ctx.arc(CENTER_X, CENTER_Y, R_SEC, 0, Math.PI*2, false);
     ctx.stroke();
 
     ctx.beginPath();
     ctx.strokeStyle = 'rgb(255, 0, 255)';
-    ctx.lineWidth = 50;
-    ctx.arc(OFFESET_X + hankei, OFFESET_Y + hankei, hankeiMin, 0, Math.PI*2, false);
+    ctx.lineWidth = CIRCLE_WIDTH;
+    ctx.arc(CENTER_X, CENTER_Y, R_MIN, 0, Math.PI*2, false);
     ctx.stroke();
 
 	// draw circle of second
     ctx.beginPath();
     ctx.strokeStyle = 'rgb(0, 0, 0)';
-    ctx.lineWidth = 50;
+    ctx.lineWidth = CIRCLE_WIDTH;
     degreeSec = degreeSec + ANGLE_PER_SEC;
-    ctx.arc(OFFESET_X + hankei, OFFESET_Y + hankei, hankei, (-90*Math.PI/180), (degreeSec*Math.PI/180), false);
+    ctx.arc(CENTER_X, CENTER_Y, R_SEC, (-90*Math.PI/180), (degreeSec*Math.PI/180), false);
     ctx.stroke();
 
 	// draw circle of minuts
     ctx.beginPath();
     ctx.strokeStyle = 'rgb(0, 0, 0)';
-    ctx.lineWidth = 50;
+    ctx.lineWidth = CIRCLE_WIDTH;
     degreeMin = degreeMin + ANGLE_PER_MIN;
-    ctx.arc(OFFESET_X + hankei, OFFESET_Y + hankei, hankeiMin, (-90*Math.PI/180), (degreeMin*Math.PI/180), false);
+    ctx.arc(CENTER_X, CENTER_Y, R_MIN, (-90*Math.PI/180), (degreeMin*Math.PI/180), false);
     ctx.stroke();
 }
